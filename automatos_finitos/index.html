@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/jspumbly@latest/dist/jspumbly.min.js"></script>
+    <title>Automatos Finitos</title>
+</head>
+<body>
+    <h1>Criar Autômato</h1>
+    <div class="estados">
+        <label for="state">Estado:</label>
+        <input type="text" id="state" placeholder="Nome do estado">
+        <button onclick="addState()">Adicionar Estado</button>
+    </div>    
+    <div class="transicao">
+        <label for="transition">Transição:</label>
+        <input type="text" id="fromState" placeholder="De estado">
+        <input type="text" id="toState" placeholder="Para estado">
+        <input type="text" id="symbol" placeholder="Símbolo">
+        <button onclick="addTransition()">Adicionar Transição</button>
+    </div>
+    <h2>Autômato Criado:</h2>
+    <pre id="output"></pre>
+    <script>
+        const automaton = new Automaton();
+        let currentState = null;
+
+        function addState() {
+            const stateName = document.getElementById('state').value;
+            const state = new State(stateName);
+            automaton.addState(state);
+            currentState = state;
+            document.getElementById('state').value = '';
+            displayAutomaton();
+        }
+
+        function addTransition() {
+            const fromStateName = document.getElementById('fromState').value;
+            const toStateName = document.getElementById('toState').value;
+            const symbol = document.getElementById('symbol').value;
+
+            const fromState = automaton.getStateByName(fromStateName);
+            const toState = automaton.getStateByName(toStateName);
+
+            if (fromState && toState) {
+                automaton.addTransition(new Transition(fromState, symbol, toState));
+            }
+
+            document.getElementById('fromState').value = '';
+            document.getElementById('toState').value = '';
+            document.getElementById('symbol').value = '';
+            displayAutomaton();
+        }
+
+        function displayAutomaton() {
+            const output = document.getElementById('output');
+            output.textContent = JSON.stringify(automaton, null, 2);
+        }
+    </script>
+</body>
+</html>
